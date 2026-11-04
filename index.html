@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Para Moni | Una Experiencia Inolvidable</title>
+
+  <!-- Typography & Libraries -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    :root {
+      --obsidian-black: #050505;
+      --charcoal: #111111;
+      --champagne-gold: #D4AF37;
+      --dark-gold: #B08D57;
+      --ivory-white: #F7F5F0;
+      --glass-bg: rgba(17, 17, 17, 0.75);
+      --glass-border: rgba(212, 175, 55, 0.25);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      background-color: var(--obsidian-black);
+      color: var(--ivory-white);
+      font-family: 'Montserrat', sans-serif;
+      overflow-x: hidden;
+    }
+
+    #ambient-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .experience-stage {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .title-luxury {
+      font-family: 'Playfair Display', serif;
+      color: var(--champagne-gold);
+      font-weight: 600;
+      letter-spacing: -0.5px;
+    }
+
+    .text-gold-subtle {
+      color: var(--dark-gold);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+    }
+
+    .btn-luxury {
+      background: linear-gradient(135deg, var(--champagne-gold), var(--dark-gold));
+      color: var(--obsidian-black);
+      border: none;
+      padding: 16px 36px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-radius: 40px;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+      transition: all 0.4s ease;
+      margin-top: 24px;
+    }
+
+    .btn-luxury:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 15px 40px rgba(212, 175, 55, 0.5);
+    }
+
+    .countdown-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      padding: 40px 24px;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 20px rgba(212, 175, 55, 0.05);
+    }
+
+    .countdown-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 32px 0;
+    }
+
+    .countdown-unit {
+      background: rgba(5, 5, 5, 0.8);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      border-radius: 16px;
+      padding: 16px 8px;
+    }
+
+    .countdown-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--champagne-gold);
+      text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+    }
+
+    .countdown-label {
+      font-size: 0.65rem;
+      color: var(--dark-gold);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-top: 6px;
+    }
+
+    .box-container {
+      perspective: 1000px;
+      margin: 40px 0;
+      cursor: pointer;
+    }
+
+    .box-3d {
+      width: 160px;
+      height: 160px;
+      position: relative;
+      transform-style: preserve-3d;
+      animation: floatBox 4s ease-in-out infinite;
+    }
+
+    @keyframes floatBox {
+      0%, 100% { transform: translateY(0) rotateX(15deg) rotateY(25deg); }
+      50% { transform: translateY(-20px) rotateX(20deg) rotateY(35deg); }
+    }
+
+    .box-face {
+      position: absolute;
+      width: 160px;
+      height: 160px;
+      background: linear-gradient(145deg, #181818, #0a0a0a);
+      border: 2px solid var(--champagne-gold);
+      box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.2);
+    }
+
+    .face-front  { transform: rotateY(0deg) translateZ(80px); }
+    .face-back   { transform: rotateY(180deg) translateZ(80px); }
+    .face-right  { transform: rotateY(90deg) translateZ(80px); }
+    .face-left   { transform: rotateY(-90deg) translateZ(80px); }
+    .face-top    { transform: rotateX(90deg) translateZ(80px); background: #222; }
+    .face-bottom { transform: rotateX(-90deg) translateZ(80px); box-shadow: 0 30px 40px rgba(0,0,0,0.9); }
+
+    .box-ribbon-v {
+      position: absolute;
+      left: 70px;
+      width: 20px;
+      height: 100%;
+      background: linear-gradient(to right, #B08D57, #D4AF37, #B08D57);
+    }
+
+    .box-ribbon-h {
+      position: absolute;
+      top: 70px;
+      height: 20px;
+      width: 100%;
+      background: linear-gradient(to bottom, #B08D57, #D4AF37, #B08D57);
+    }
+
+    .quiz-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(25px);
+      border-radius: 24px;
+      padding: 36px 24px;
+      max-width: 500px;
+      width: 100%;
+    }
+
+    .input-luxury {
+      width: 100%;
+      background: rgba(5,5,5,0.7);
+      border: 1px solid var(--dark-gold);
+      border-radius: 12px;
+      padding: 16px 20px;
+      color: var(--ivory-white);
+      font-size: 1rem;
+      text-align: center;
+      margin: 20px 0;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .input-luxury:focus {
+      border-color: var(--champagne-gold);
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+    }
+
+    .photo-hero {
+      width: 100%;
+      max-width: 700px;
+      height: 380px;
+      border-radius: 20px;
+      object-fit: cover;
+      border: 1px solid var(--champagne-gold);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+      margin: 20px 0;
+    }
+
+    .hotel-logo-img {
+      max-width: 180px;
+      margin-bottom: 15px;
+      filter: drop-shadow(0 0 8px rgba(212,175,55,0.4));
+    }
+
+    #flight-canvas {
+      width: 100%;
+      max-width: 500px;
+      height: 200px;
+      background: rgba(10,10,10,0.8);
+      border-radius: 16px;
+      border: 1px solid var(--glass-border);
+      margin: 20px 0;
+    }
+
+    .glass-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(15px);
+      border-radius: 16px;
+      padding: 20px;
+      margin: 12px 0;
+      width: 100%;
+      max-width: 550px;
+      text-align: left;
+    }
+
+    .letter-container {
+      background: var(--glass-bg);
+      border: 1px solid var(--champagne-gold);
+      border-radius: 20px;
+      padding: 30px 24px;
+      max-width: 600px;
+      width: 100%;
+      text-align: left;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: #E0E0E0;
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="ambient-canvas"></canvas>
+
+  <!-- FASE 1: COUNTDOWN ESPERA LUJO -->
+  <div id="phase-wait" class="experience-stage">
+    <div class="countdown-card">
+      <p class="text-gold-subtle">Experiencia Privada</p>
+      <h1 class="title-luxury" style="font-size: 2.4rem; margin: 12px 0 24px;">Moni...</h1>
+      <p style="font-size: 0.95rem; color: #AAA; font-weight: 300;">Algunas sorpresas merecen ser esperadas.</p>
+      
+      <div class="countdown-grid">
+        <div class="countdown-unit">
+          <div id="cd-days" class="countdown-number">00</div>
+          <div class="countdown-label">Días</div>
+        </div>
+        <div class="countdown-unit">
+          <div id="cd-hours" class="countdown-number">00</div>
+          <div class="countdown-label">Horas</div>
+        </div>
+        <div class="countdown-unit">
+          <div id="cd-mins" class="countdown-number">00</div>
+          <div class="countdown-label">Minutos</div>
+        </div>
+        <div class="countdown-unit">
+          <div id="cd-secs" class="countdown-number">00</div>
+          <div class="countdown-label">Segundos</div>
+        </div>
+      </div>
+
+      <p style="color: var(--champagne-gold); font-size: 0.85rem; font-weight: 500;">
+        08 de Noviembre de 2026 &nbsp;|&nbsp; 10:00 AM
+      </p>
+      <p style="color: #666; font-size: 0.75rem; margin-top: 16px; letter-spacing: 1px;">
+        Tu regalo está esperando.
+      </p>
+    </div>
+  </div>
+
+  <!-- FASE 2: LA CAJA 3D -->
+  <div id="phase-box" class="experience-stage hidden">
+    <p class="text-gold-subtle">Misterio</p>
+    <h2 class="title-luxury" style="font-size: 2rem; margin-top: 10px;">Un Regalo Guardado</h2>
+    
+    <div class="box-container" onclick="nextPhase(3)">
+      <div class="box-3d">
+        <div class="box-face face-front"><div class="box-ribbon-v"></div><div class="box-ribbon-h"></div></div>
+        <div class="box-face face-back"><div class="box-ribbon-v"></div><div class="box-ribbon-h"></div></div>
+        <div class="box-face face-right"><div class="box-ribbon-v"></div><div class="box-ribbon-h"></div></div>
+        <div class="box-face face-left"><div class="box-ribbon-v"></div><div class="box-ribbon-h"></div></div>
+        <div class="box-face face-top"><div class="box-ribbon-v"></div><div class="box-ribbon-h"></div></div>
+        <div class="box-face face-bottom"></div>
+      </div>
+    </div>
+
+    <p style="max-width: 440px; font-size: 0.95rem; color: #CCC; line-height: 1.6;">
+      Durante mucho tiempo este regalo ha permanecido cerrado.<br>Y ahora está listo para encontrarte.
+    </p>
+    <button class="btn-luxury" onclick="nextPhase(3)">DESCUBRIR LA LLAVE</button>
+  </div>
+
+  <!-- FASE 3: LAS TRES CLAVES -->
+  <div id="phase-quiz" class="experience-stage hidden">
+    <div class="quiz-card">
+      <p id="quiz-step-title" class="text-gold-subtle">Clave 1 de 3</p>
+      <h3 id="quiz-question" class="title-luxury" style="font-size: 1.5rem; margin: 16px 0;">¿Cómo te llamo cuando estamos solos?</h3>
+      
+      <input type="text" id="quiz-input" class="input-luxury" placeholder="Escribe tu respuesta..." autocomplete="off">
+      <p id="quiz-feedback" style="color: #ff5555; font-size: 0.8rem; height: 20px;"></p>
+      
+      <button class="btn-luxury" onclick="checkQuizAnswer()">VERIFICAR</button>
+    </div>
+  </div>
+
+  <!-- FASE 4 & 5: VERIFICACIÓN Y MADRID -->
+  <div id="phase-transition" class="experience-stage hidden">
+    <div style="text-align: center;">
+      <div style="font-size: 3rem; color: var(--champagne-gold); margin-bottom: 20px;">✓</div>
+      <h2 id="trans-title" class="title-luxury" style="font-size: 2.2rem; margin-bottom: 16px;">Verificando recuerdos...</h2>
+      <p id="trans-sub" style="color: var(--dark-gold); font-size: 1rem; letter-spacing: 2px;">LLAVE ACEPTADA</p>
+    </div>
+  </div>
+
+  <!-- FASE 6: PRIMERA PISTA -->
+  <div id="phase-clue1" class="experience-stage hidden">
+    <p class="text-gold-subtle">Primera Pista</p>
+    <h2 class="title-luxury" style="font-size: 2.2rem; margin: 16px 0 24px; max-width: 600px;">
+      Tu regalo no cabe en una caja.
+    </h2>
+    <p style="max-width: 450px; font-size: 1.05rem; color: #BBB; line-height: 1.8;">
+      Porque los mejores regalos no se guardan.<br><strong style="color: var(--champagne-gold);">Se viven.</strong>
+    </p>
+    <button class="btn-luxury" onclick="nextPhase(7)">CONTINUAR</button>
+  </div>
+
+  <!-- FASE 7: SEGUNDA PISTA (BASTIÓN HOTEL REAL) -->
+  <div id="phase-clue2" class="experience-stage hidden">
+    <p class="text-gold-subtle">El Hospedaje</p>
+    <img src="bastionluxuryhotel-homepage-footer-bastionluxuryhotel-logo-68b4900127135.svg" class="hotel-logo-img" alt="Bastión Logo">
+    <img src="1-bastion-gallery-68f15abddce76.jpg" class="photo-hero" alt="Bastion Luxury Hotel">
+    <h3 class="title-luxury" style="font-size: 1.6rem;">Durante tres noches este lugar será tu hogar</h3>
+    <p style="color: var(--dark-gold); margin: 10px 0 20px; font-weight: 600;">10 Noviembre 2026 &nbsp;↓&nbsp; 13 Noviembre 2026</p>
+    <button class="btn-luxury" onclick="nextPhase(8)">CONTINUAR</button>
+  </div>
+
+  <!-- FASE 8: TERCERA PISTA (MAPA ANIMADO) -->
+  <div id="phase-clue3" class="experience-stage hidden">
+    <p class="text-gold-subtle">La Ruta</p>
+    <h2 class="title-luxury" style="font-size: 2rem; margin-top: 10px;">BOG ✈ CTG</h2>
+    <canvas id="flight-canvas"></canvas>
+    <p style="font-size: 1rem; color: #CCC;">El martes 10 de noviembre comienza la aventura.</p>
+    <button class="btn-luxury" onclick="nextPhase(9)">DESCUBRIR DESTINO</button>
+  </div>
+
+  <!-- FASE 9: GRAN REVELACIÓN (CARTAGENA) -->
+  <div id="phase-reveal" class="experience-stage hidden">
+    <p class="text-gold-subtle">Destino Confirmado</p>
+    <h1 class="title-luxury" style="font-size: 2.8rem; margin: 10px 0;">¡NOS VAMOS A CARTAGENA!</h1>
+    <p style="color: var(--dark-gold); font-size: 1.1rem; letter-spacing: 2px; margin-bottom: 20px;">10 AL 13 DE NOVIEMBRE DE 2026</p>
+    
+    <img src="bastion-gallery-img-03-68d5981715940.jpg" class="photo-hero" alt="Cartagena Murallas">
+
+    <div class="glass-card">
+      <div style="color: var(--champagne-gold); font-weight: 700; margin-bottom: 8px;">✈ Vuelo de Ida — LATAM LA4110</div>
+      <div style="font-size: 0.9rem; color: #BBB;">Bogotá (BOG) → Cartagena (CTG)</div>
+      <div style="font-size: 0.85rem; color: #888; margin-top: 4px;">10 Noviembre 2026 &nbsp;|&nbsp; 10:15 AM → 11:50 AM</div>
+    </div>
+
+    <div class="glass-card">
+      <div style="color: var(--champagne-gold); font-weight: 700; margin-bottom: 8px;">🏨 Bastión Luxury Hotel</div>
+      <div style="font-size: 0.9rem; color: #BBB;">Centro Histórico, Cartagena</div>
+      <div style="font-size: 0.85rem; color: #888; margin-top: 4px;">10 al 13 de Noviembre &nbsp;|&nbsp; 3 Noches de Lujo</div>
+    </div>
+
+    <div class="glass-card">
+      <div style="color: var(--champagne-gold); font-weight: 700; margin-bottom: 8px;">✈ Vuelo de Regreso — AVIANCA AV8559</div>
+      <div style="font-size: 0.9rem; color: #BBB;">Cartagena (CTG) → Bogotá (BOG)</div>
+      <div style="font-size: 0.85rem; color: #888; margin-top: 4px;">13 Noviembre 2026 &nbsp;|&nbsp; 12:05 PM → 1:30 PM</div>
+    </div>
+
+    <button class="btn-luxury" onclick="nextPhase(10)">LEER CARTA</button>
+  </div>
+
+  <!-- FASE 10: CARTA MAQUINA DE ESCRIBIR -->
+  <div id="phase-letter" class="experience-stage hidden">
+    <p class="text-gold-subtle" style="margin-bottom: 20px;">De mi corazón para ti</p>
+    <div class="letter-container">
+      <span id="typed-letter"></span>
+    </div>
+    
+    <div id="letter-decision" class="hidden" style="margin-top: 30px; text-align: center;">
+      <p class="title-luxury" style="font-size: 1.5rem; margin-bottom: 15px;">¿Aceptas esta aventura?</p>
+      <button class="btn-luxury" onclick="celebrate()">¡SÍ, QUIERO IR!</button>
+    </div>
+  </div>
+
+  <!-- FASE 11: CELEBRACIÓN FINAL -->
+  <div id="phase-celebration" class="experience-stage hidden">
+    <h1 class="title-luxury" style="font-size: 3rem; margin-bottom: 10px;">¡PREPARA LAS MALETAS!</h1>
+    <p style="font-size: 1.3rem; color: var(--dark-gold); letter-spacing: 2px;">Cartagena nos espera.</p>
+    <img src="21-bastion-gallery-68f15afdd9ce9.jpg" class="photo-hero" style="margin: 30px 0;" alt="Bastión Rooftop">
+    <h2 class="title-luxury" style="font-size: 2rem;">¡Feliz Cumpleaños Moni! ❤️</h2>
+  </div>
+
+  <script>
+    // Fecha objetivo exacta: 8 de Noviembre de 2026 a las 10:00 AM (Bogotá UTC-5)
+    const targetTime = Date.UTC(2026, 10, 8, 15, 0, 0); 
+    let currentQuizIndex = 0;
+    
+    const quizQuestions = [
+      { q: "¿Cómo te llamo cuando estamos solos?", a: "moni", confirm: "✓ Recuerdo confirmado", label: "Clave 1 de 3" },
+      { q: "¿Cuál es la fecha en la que nació una mujer extraordinaria?", a: "1973-11-11", confirm: "✓ Recuerdo confirmado", label: "Clave 2 de 3" },
+      { q: "¿Cuál es la ciudad de nuestra próxima aventura de amor?", a: "madrid", confirm: "✓ Destino confirmado", label: "Clave 3 de 3" }
+    ];
+
+    window.addEventListener('load', () => {
+      initAmbientCanvas();
+      checkTimerOrPersistence();
+    });
+
+    function checkTimerOrPersistence() {
+      const now = new Date().getTime();
+      const giftOpened = localStorage.getItem('giftOpened') === 'true';
+
+      if (now < targetTime) {
+        showPhase('phase-wait');
+        startCountdown();
+      } else if (giftOpened) {
+        showPhase('phase-reveal');
+      } else {
+        showPhase('phase-box');
+      }
+    }
+
+    function startCountdown() {
+      const updateTimer = () => {
+        const now = new Date().getTime();
+        const diff = targetTime - now;
+
+        if (diff <= 0) {
+          checkTimerOrPersistence();
+          return;
+        }
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+        document.getElementById('cd-days').innerText = String(days).padStart(2, '0');
+        document.getElementById('cd-hours').innerText = String(hours).padStart(2, '0');
+        document.getElementById('cd-mins').innerText = String(mins).padStart(2, '0');
+        document.getElementById('cd-secs').innerText = String(secs).padStart(2, '0');
+      };
+
+      updateTimer();
+      setInterval(updateTimer, 1000);
+    }
+
+    function showPhase(phaseId) {
+      document.querySelectorAll('.experience-stage').forEach(el => el.classList.add('hidden'));
+      const target = document.getElementById(phaseId);
+      target.classList.remove('hidden');
+      gsap.fromTo(target, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8 });
+    }
+
+    function nextPhase(phaseNumber) {
+      if (phaseNumber === 3) showPhase('phase-quiz');
+      if (phaseNumber === 7) showPhase('phase-clue2');
+      if (phaseNumber === 8) {
+        showPhase('phase-clue3');
+        drawFlightRoute();
+      }
+      if (phaseNumber === 9) {
+        localStorage.setItem('giftOpened', 'true');
+        showPhase('phase-reveal');
+      }
+      if (phaseNumber === 10) {
+        showPhase('phase-letter');
+        startTypedLetter();
+      }
+    }
+
+    function checkQuizAnswer() {
+      const input = document.getElementById('quiz-input').value.trim().toLowerCase();
+      const feedback = document.getElementById('quiz-feedback');
+      const current = quizQuestions[currentQuizIndex];
+
+      if (input === current.a) {
+        feedback.style.color = '#D4AF37';
+        feedback.innerText = current.confirm;
+        
+        setTimeout(() => {
+          currentQuizIndex++;
+          if (currentQuizIndex < quizQuestions.length) {
+            document.getElementById('quiz-step-title').innerText = quizQuestions[currentQuizIndex].label;
+            document.getElementById('quiz-question').innerText = quizQuestions[currentQuizIndex].q;
+            document.getElementById('quiz-input').value = '';
+            feedback.innerText = '';
+          } else {
+            runMadridTransition();
+          }
+        }, 1000);
+      } else {
+        feedback.style.color = '#ff5555';
+        feedback.innerText = 'Respuesta incorrecta. Inténtalo de nuevo.';
+      }
+    }
+
+    function runMadridTransition() {
+      showPhase('phase-transition');
+      setTimeout(() => {
+        document.getElementById('trans-title').innerText = "Madrid será nuestra próxima aventura.";
+        document.getElementById('trans-sub').innerText = "Pero aún no es momento... Antes viviremos algo especial.";
+      }, 2500);
+
+      setTimeout(() => {
+        showPhase('phase-clue1');
+      }, 5500);
+    }
+
+    function drawFlightRoute() {
+      const canvas = document.getElementById('flight-canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+
+      const p1 = { x: 50, y: 140 };
+      const p2 = { x: canvas.width - 50, y: 60 };
+      let progress = 0;
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        ctx.beginPath();
+        ctx.strokeStyle = 'rgba(212, 175, 55, 0.4)';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([5, 5]);
+        ctx.moveTo(p1.x, p1.y);
+        ctx.quadraticCurveTo(canvas.width / 2, 20, p2.x, p2.y);
+        ctx.stroke();
+
+        ctx.fillStyle = '#D4AF37';
+        ctx.beginPath(); ctx.arc(p1.x, p1.y, 6, 0, Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.arc(p2.x, p2.y, 6, 0, Math.PI*2); ctx.fill();
+
+        ctx.font = '12px Montserrat';
+        ctx.fillText('BOG', p1.x - 12, p1.y + 20);
+        ctx.fillText('CTG', p2.x - 12, p2.y + 20);
+
+        progress += 0.008;
+        if (progress > 1) progress = 0;
+
+        const t = progress;
+        const curX = (1-t)*(1-t)*p1.x + 2*(1-t)*t*(canvas.width/2) + t*t*p2.x;
+        const curY = (1-t)*(1-t)*p1.y + 2*(1-t)*t*20 + t*t*p2.y;
+
+        ctx.fillStyle = '#FFF';
+        ctx.beginPath(); ctx.arc(curX, curY, 4, 0, Math.PI*2); ctx.fill();
+
+        requestAnimationFrame(animate);
+      }
+      animate();
+    }
+
+    function startTypedLetter() {
+      new Typed('#typed-letter', {
+        strings: [
+          "Querida Moni,<br><br>" +
+          "La vida me ha regalado muchos momentos inolvidables contigo.<br>" +
+          "Pero algunos recuerdos todavía están esperando ser escritos.<br><br>" +
+          "Por eso quiero que celebremos tu cumpleaños de una forma diferente.<br>" +
+          "Antes de nuestra próxima aventura en Madrid...<br>" +
+          "Quiero regalarte unos días entre murallas, atardeceres y mar.<br><br>" +
+          "Gracias por cada sonrisa.<br>" +
+          "Gracias por cada sueño compartido.<br>" +
+          "Gracias por hacer que cada viaje tenga sentido.<br><br>" +
+          "Feliz cumpleaños.<br><strong>Te amo.</strong>"
+        ],
+        typeSpeed: 35,
+        showCursor: true,
+        cursorChar: '│',
+        onComplete: () => {
+          document.getElementById('letter-decision').classList.remove('hidden');
+        }
+      });
+    }
+
+    function celebrate() {
+      localStorage.setItem('giftOpened', 'true');
+      showPhase('phase-celebration');
+
+      confetti({
+        particleCount: 120,
+        spread: 80,
+        origin: { y: 0.6 },
+        colors: ['#D4AF37', '#B08D57', '#FFFFFF']
+      });
+    }
+
+    function initAmbientCanvas() {
+      const canvas = document.getElementById('ambient-canvas');
+      const ctx = canvas.getContext('2d');
+      let particles = [];
+
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      for (let i = 0; i < 55; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          r: Math.random() * 2 + 0.5,
+          speedY: Math.random() * 0.4 + 0.1,
+          opacity: Math.random() * 0.6 + 0.2
+        });
+      }
+
+      function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+          ctx.fillStyle = `rgba(212, 175, 55, ${p.opacity})`;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fill();
+
+          p.y -= p.speedY;
+          if (p.y < 0) p.y = canvas.height;
+        });
+        requestAnimationFrame(render);
+      }
+      render();
+    }
+  </script>
+</body>
+</html>
